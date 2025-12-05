@@ -13,8 +13,10 @@
     .buttons{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
     .btn{appearance:none;border:0;padding:12px 18px;border-radius:10px;font-weight:600;cursor:pointer;background:var(--accent);color:white;min-width:150px}
     .btn.secondary{background:#4a5568}
-    .preview{border-radius:10px;overflow:hidden;border:1px solid #e6e9ef;background:#fff;max-width:100%;height:420px;display:grid;place-items:center}
+    .preview{border-radius:10px;overflow:hidden;border:1px solid #e6e9ef;background:#fff;max-width:100%;height:420px;display:grid;place-items:center;position:relative}
     .preview img{max-width:100%;max-height:100%;display:block}
+    .preview .msg{position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,0.6);color:#fff;padding:6px 10px;border-radius:8px;font-size:13px;display:none}
+    .preview.error .msg{display:block}
     .small{font-size:13px;color:var(--muted);margin-top:12px}
     footer{margin-top:14px;font-size:13px;color:#8b8f97}
     @media (max-width:480px){ .preview{height:260px} }
@@ -27,14 +29,15 @@
 
     <!-- BOTONES -->
     <div class="buttons">
-      <!-- Cambia los data-image a tus URLs reales -->
-      <button class="btn" data-image="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/refs/heads/main/Ensamble%20Bandeja%201%20-%20Antares.JPG" id="btn1">Ver imagen 1</button>
+      <!-- URLs corregidas: raw.githubusercontent.com usa /<owner>/<repo>/<branch>/<path> (NO refs/heads) -->
+      <button class="btn" data-image="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bandeja%201%20-%20Antares.JPG" id="btn1">Ver imagen 1</button>
       <button class="btn secondary" data-image="https://via.placeholder.com/1200x800?text=Imagen+2" id="btn2">Ver imagen 2</button>
     </div>
 
     <!-- PREVIEW (muestra la imágen dentro de la misma página) -->
     <div class="preview" id="preview">
-      <img src="https://via.placeholder.com/1200x800?text=Imagen+1" alt="Previsualización" id="previewImg">
+      <img src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bandeja%201%20-%20Antares.JPG" alt="Previsualización" id="previewImg">
+      <div class="msg" id="previewMsg">No se pudo cargar la imagen</div>
     </div>
 
     <div class="small">
@@ -50,14 +53,40 @@
     // Selecciona elementos
     const btns = document.querySelectorAll('.btn');
     const previewImg = document.getElementById('previewImg');
+    const preview = document.getElementById('preview');
+    const previewMsg = document.getElementById('previewMsg');
+
+    // Placeholder usado cuando la imagen falla
+    const placeholder = 'https://via.placeholder.com/1200x800?text=No+se+encuentra+la+imagen';
+
+    // Manejo de error de carga: muestra placeholder y mensaje
+    previewImg.addEventListener('error', () => {
+      preview.classList.add('error');
+      previewMsg.textContent = 'No se pudo cargar la imagen — comprueba la URL o abre en nueva pestaña.';
+      // Evitar bucle infinito si el placeholder fallara
+      if (previewImg.src !== placeholder) {
+        previewImg.src = placeholder;
+      } else {
+        previewImg.alt = 'Imagen no disponible';
+      }
+      console.warn('Fallo al cargar la imagen:', previewImg.dataset.requestedUrl || previewImg.src);
+    });
+
+    // Cuando la imagen se carga bien, ocultar mensaje
+    previewImg.addEventListener('load', () => {
+      preview.classList.remove('error');
+      previewImg.alt = 'Imagen cargada';
+    });
 
     // Comportamiento por defecto: actualiza la vista previa en la misma página
     btns.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const url = btn.dataset.image;
+        // Guarda la URL solicitada para debug en caso de error
+        previewImg.dataset.requestedUrl = url;
         // Actualiza preview
         previewImg.src = url;
-        previewImg.alt = 'Imagen cargada';
+        previewImg.alt = 'Cargando...';
       });
 
       // Doble-click abre en nueva pestaña (opcional)
@@ -67,16 +96,8 @@
       });
     });
 
-    // Si quieres que siempre abra en nueva pestaña (sin vista previa),
-    // reemplaza el listener anterior por este (comenta el anterior y descomenta):
-    /*
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const url = btn.dataset.image;
-        window.open(url, '_blank');
-      });
-    });
-    */
+    // Consejo: si persiste el problema, abre la URL directamente en una pestaña nueva
+    // (por ejemplo pega la URL en la barra del navegador) para ver el error real (404, permiso, etc).
   </script>
 </body>
 </html>
