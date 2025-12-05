@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Altair y Antares — Previsualización</title>
   <style>
-    /* Fondo blanco y estilos mínimos */
     :root { color-scheme: light; }
     body {
       margin: 0;
@@ -55,7 +54,7 @@
     .thumb img {
       width: 100%;
       height: 120px;
-      object-fit: cover; /* recorta suavemente para miniatura */
+      object-fit: cover;
       border-radius: 8px;
     }
     .thumb .label {
@@ -105,40 +104,33 @@
     <section class="thumbnails" aria-label="Previsualización de imágenes">
       <div class="thumb" id="thumbAltair" tabindex="0" role="button" aria-label="Ver Altair">
         <img
-          src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumental.JPG"
-          alt="Miniatura de Altair"
-          loading="lazy"
-       ntares" tabindex="0" role="button" aria-label="Ver Antares">
-        <img
-          src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bares.JPG
+          src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumental.JPG
+        <div class="label">Altair</div>
+      </div>
+
+      <div class="thumb" id="thumbAntares" tabindex="0" role="button" aria-label="Ver Antares">
+        https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bandeja%201%20-%20Antares.JPG
         <div class="label">Antares</div>
       </div>
     </section>
 
     <!-- ===== Visor principal ===== -->
     <section class="viewer" aria-live="polite">
-      <!-- Altair: RAW con hash de commit -->
       <img
-        id="imgAltair"
-        loading="lazy"
-        src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3al.JPG
-      <!-- Antares: RAW usando /main -->
-      <img
-        id="imgAntares"
-        loading="lazy"
-       /Ensamble%20Bandeja%201%20-%20Antares.JPG
-      <div id="placeholder" class="hint">Pulsa una miniatura o un botón para mostrar la imagen.</div>
+        id="imgAltair" loading="lazy"
+        src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumental.JPG"
+        alt="Altair: Bandeja 1ntent.com/adisenoOrt/QRPANACEA/main/Ensamolder" class="hint">Pulsa una miniatura o un botón para mostrar la imagen.</div>
     </section>
 
     <!-- Enlaces de comprobación (opcional) -->
     <div class="links">
-      <a href="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumental.JPGr en RAW</a>
+      <a href="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumental.JPG" target</a>
       https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bandeja%201%20-%20Antares.JPGVer Antares en RAW</a>
     </div>
 
     <p class="hint">
-      Si no ves alguna imagen, verifica que el enlace RAW siga el formato correcto y que el nombre del archivo
-      (incluye mayúsculas/minúsculas y espacios codificados) coincida exactamente.
+      Si necesitas convertir un enlace de <code>blob/main</code> a RAW rápidamente, usa <code>?raw=true</code> o cambia
+      <code>github.com/.../blob/main</code> por <code>raw.githubusercontent.com/.../main</code>. [2](https://stackoverflow.com/questions/63252337/how-to-open-and-display-images-from-a-github-repository)[1](https://thesophile.github.io/get-github-image-link/)
     </p>
   </main>
 
@@ -158,16 +150,12 @@
     const thumbAntares= document.getElementById('thumbAntares');
 
     function showOnly(which) {
-      // Oculta placeholder
       placeholder.style.display = 'none';
-
-      // Desactiva todas
       imgAltair.classList.remove('active');
       imgAntares.classList.remove('active');
       thumbAltair.classList.remove('active');
       thumbAntares.classList.remove('active');
 
-      // Activa la solicitada
       if (which === 'altair') {
         imgAltair.classList.add('active');
         thumbAltair.classList.add('active');
@@ -175,17 +163,16 @@
         imgAntares.classList.add('active');
         thumbAntares.classList.add('active');
       } else {
-        // Nada seleccionado
         placeholder.style.display = 'block';
       }
     }
 
-    // Eventos de botones
+    // Botones
     btnAltair.addEventListener('click', () => showOnly('altair'));
     btnAntares.addEventListener('click', () => showOnly('antares'));
     btnClear .addEventListener('click', () => showOnly(null));
 
-    // Eventos de thumbnails (click y teclado para accesibilidad)
+    // Thumbnails (click + teclado)
     const activateWithKeyboard = (el, which) => {
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -194,7 +181,6 @@
         }
       });
     };
-
     thumbAltair.addEventListener('click', () => showOnly('altair'));
     thumbAntares.addEventListener('click', () => showOnly('antares'));
     activateWithKeyboard(thumbAltair, 'altair');
