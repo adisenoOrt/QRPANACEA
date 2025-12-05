@@ -16,6 +16,7 @@
     .preview{border-radius:10px;overflow:hidden;border:1px solid #e6e9ef;background:#fff;max-width:100%;height:420px;display:grid;place-items:center;position:relative}
     .preview img{max-width:100%;max-height:100%;display:block}
     .preview .msg{position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,0.6);color:#fff;padding:6px 10px;border-radius:8px;font-size:13px;display:none}
+    .preview.loading::after{content:'Cargando…';position:absolute;right:12px;top:12px;background:rgba(0,0,0,0.6);color:#fff;padding:6px 10px;border-radius:8px;font-size:13px}
     .preview.error .msg{display:block}
     .small{font-size:13px;color:var(--muted);margin-top:12px}
     footer{margin-top:14px;font-size:13px;color:#8b8f97}
@@ -29,14 +30,14 @@
 
     <!-- BOTONES -->
     <div class="buttons">
-      <!-- URLs corregidas: raw.githubusercontent.com usa /<owner>/<repo>/<branch>/<path> (NO refs/heads) -->
+      <!-- usa raw.githubusercontent.com con /<owner>/<repo>/<branch>/<path> -->
       <button class="btn" data-image="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bandeja%201%20-%20Antares.JPG" id="btn1">Ver imagen 1</button>
       <button class="btn secondary" data-image="https://via.placeholder.com/1200x800?text=Imagen+2" id="btn2">Ver imagen 2</button>
     </div>
 
     <!-- PREVIEW (muestra la imágen dentro de la misma página) -->
     <div class="preview" id="preview">
-      <img src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bandeja%201%20-%20Antares.JPG" alt="Previsualización" id="previewImg">
+      <img src="https://via.placeholder.com/1200x800?text=Imagen+1" alt="Previsualización" id="previewImg">
       <div class="msg" id="previewMsg">No se pudo cargar la imagen</div>
     </div>
 
@@ -50,54 +51,101 @@
   </main>
 
   <script>
-    // Selecciona elementos
+    // Elementos
     const btns = document.querySelectorAll('.btn');
     const previewImg = document.getElementById('previewImg');
     const preview = document.getElementById('preview');
     const previewMsg = document.getElementById('previewMsg');
 
-    // Placeholder usado cuando la imagen falla
+    // Placeholder y control de URL actual
     const placeholder = 'https://via.placeholder.com/1200x800?text=No+se+encuentra+la+imagen';
+    let currentObjectUrl = null;
 
-    // Manejo de error de carga: muestra placeholder y mensaje
-    previewImg.addEventListener('error', () => {
-      preview.classList.add('error');
-      previewMsg.textContent = 'No se pudo cargar la imagen — comprueba la URL o abre en nueva pestaña.';
-      // Evitar bucle infinito si el placeholder fallara
-      if (previewImg.src !== placeholder) {
-        previewImg.src = placeholder;
-      } else {
-        previewImg.alt = 'Imagen no disponible';
+    // Limpia object URL anterior si existe
+    function revokeCurrentObjectUrl() {
+      if (currentObjectUrl) {
+        URL.revokeObjectURL(currentObjectUrl);
+        currentObjectUrl = null;
       }
-      console.warn('Fallo al cargar la imagen:', previewImg.dataset.requestedUrl || previewImg.src);
-    });
+    }
 
-    // Cuando la imagen se carga bien, ocultar mensaje
-    previewImg.addEventListener('load', () => {
+    // Intenta cargar la imagen usando fetch -> blob -> objectURL.
+    // Esto a menudo evita problemas al asignar directamente la URL remota
+    // y facilita detectar errores (404/403) anteriormente silenciados.
+    async function loadImageToPreview(url) {
+      // marca como cargando
+      preview.classList.add('loading');
       preview.classList.remove('error');
-      previewImg.alt = 'Imagen cargada';
-    });
+      previewMsg.textContent = '';
 
-    // Comportamiento por defecto: actualiza la vista previa en la misma página
+      // evita fugas de memoria
+      revokeCurrentObjectUrl();
+
+      try {
+        // intento de fetch con timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout
+
+        const resp = await fetch(url, { mode: 'cors', signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (!resp.ok) {
+          throw new Error('HTTP ' + resp.status + ' ' + resp.statusText);
+        }
+
+        const blob = await resp.blob();
+
+        // Opcional: comprobar tipo MIME simple para ver si realmente es imagen
+        if (!blob.type.startsWith('image/')) {
+          throw new Error('El recurso no es una imagen (mime: ' + blob.type + ')');
+        }
+
+        // crea objectURL y asigna
+        currentObjectUrl = URL.createObjectURL(blob);
+        previewImg.src = currentObjectUrl;
+        previewImg.alt = 'Imagen cargada';
+        preview.classList.remove('error');
+      } catch (err) {
+        // En caso de error, muestra mensaje y placeholder
+        console.warn('Error cargando imagen para preview:', err);
+        preview.classList.add('error');
+        previewMsg.textContent = 'No se pudo cargar la imagen. Puedes abrirla en nueva pestaña para ver el error real.';
+        previewImg.src = placeholder;
+        previewImg.alt = 'No disponible';
+      } finally {
+        preview.classList.remove('loading');
+      }
+    }
+
+    // Manejadores de eventos para botones
     btns.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const url = btn.dataset.image;
-        // Guarda la URL solicitada para debug en caso de error
+        // guarda la URL para debug
         previewImg.dataset.requestedUrl = url;
-        // Actualiza preview
-        previewImg.src = url;
-        previewImg.alt = 'Cargando...';
+        // intenta cargar via fetch+blob
+        loadImageToPreview(url);
       });
 
-      // Doble-click abre en nueva pestaña (opcional)
+      // doble click abre directamente en nueva pestaña
       btn.addEventListener('dblclick', (e) => {
         const url = btn.dataset.image;
         window.open(url, '_blank');
       });
     });
 
-    // Consejo: si persiste el problema, abre la URL directamente en una pestaña nueva
-    // (por ejemplo pega la URL en la barra del navegador) para ver el error real (404, permiso, etc).
+    // Manejo de error/carga por si el src directo falla (seguridad extra)
+    previewImg.addEventListener('error', () => {
+      // Si falla al mostrar el objectURL o src directo, ya hemos intentado fallback
+      if (!preview.classList.contains('error')) {
+        preview.classList.add('error');
+        previewMsg.textContent = 'Error mostrando la imagen. Abre en nueva pestaña para depurar.';
+        previewImg.src = placeholder;
+      }
+    });
+
+    // limpiar object URLs al salir de la página
+    window.addEventListener('beforeunload', revokeCurrentObjectUrl);
   </script>
 </body>
 </html>
