@@ -6,9 +6,7 @@
   <title>Altair y Antares</title>
   <style>
     /* Fondo blanco y estilos mínimos */
-    :root {
-      color-scheme: light;
-    }
+    :root { color-scheme: light; }
     body {
       margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -19,80 +17,38 @@
       place-items: center;
       padding: 16px;
     }
-    main {
-      width: min(1000px, 95vw);
-    }
+    main { width: min(1000px, 95vw); }
     .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 12px;
     }
-    .btns {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .btns { display: flex; gap: 10px; flex-wrap: wrap; }
     button {
-      appearance: none;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      padding: 10px 14px;
-      background: #ffffff;
-      color: #111827;
-      cursor: pointer;
-      transition: 160ms ease;
+      appearance: none; border: 1px solid #d1d5db; border-radius: 8px;
+      padding: 10px 14px; background: #ffffff; color: #111827;
+      cursor: pointer; transition: 160ms ease;
     }
-    button:hover {
-      background: #f3f4f6;
-    }
+    button:hover { background: #f3f4f6; }
 
-    /* Visor con borde claro, sin fondo oscuro */
     .viewer {
-      margin-top: 10px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #ffffff; /* Blanco */
-      border: 1px solid #e5e7eb;
-      min-height: 240px;   /* Altura mínima para evitar salto al cargar */
+      margin-top: 10px; display: grid; place-items: center;
+      border-radius: 10px; overflow: hidden; background: #ffffff;
+      border: 1px solid #e5e7eb; min-height: 240px;
     }
     .viewer img {
-      width: 100%;
-      height: auto;
-      max-height: 70vh;     /* Para que no se desborde en pantallas pequeñas */
-      object-fit: contain;  /* Mantener proporciones */
-      display: none;        /* Ocultas por defecto */
+      width: 100%; height: auto; max-height: 70vh;
+      object-fit: contain; display: none;
     }
-    .viewer img.active {
-      display: block;
-      animation: fade 220ms ease;
-    }
+    .viewer img.active { display: block; animation: fade 220ms ease; }
     @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
 
-    .hint {
-      font-size: 0.95rem;
-      color: #6b7280;
-      margin-top: 8px;
-      text-align: center;
-    }
+    .hint { font-size: 0.95rem; color: #6b7280; margin-top: 8px; text-align: center; }
 
-    /* Enlaces de prueba (opcionales) */
     .links {
-      margin-top: 10px;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
+      margin-top: 10px; display: flex; gap: 10px;
+      justify-content: center; flex-wrap: wrap;
     }
-    .links a {
-      color: #2563eb;
-      text-decoration: underline;
-      font-size: 0.9rem;
-    }
+    .links a { color: #2563eb; text-decoration: underline; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -107,25 +63,23 @@
     </div>
 
     <section class="viewer" aria-live="polite">
-      <!-- Altair: RAW con hash de commit -->
+      <!-- Altair: RAW con hash de commit (válido y estable) -->
       <img
         id="imgAltair"
         loading="lazy"
-        src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20<img
-        id="imgAntares"
+        src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumental.JPG"
+       es"
         loading="lazy"
-        src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/mainder" class="hint">Pulsa un botón para mostrar la imagen.</div>
-    </section>
-
-    <div class="links">
-      <!-- Opcional: abre las imágenes en pestaña nueva para validar que cargan -->
-      <a href="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c27680/Bandeja%201%20Contenedor%201%20Instrumental.JPGVer Altair en RAW</a>
+        src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bandeja%201%20-%20Antares.JPG"
+        alt="Antares: Ensamble Bandeja  <div class="links">
+      <!-- Opcional: abrir en pestaña nueva para validar -->
+      https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumental.JPGVer Altair en RAW</a>
       https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bandeja%201%20-%20Antares.JPGVer Antares en RAW</a>
     </div>
 
     <p class="hint">
       Si no ves alguna imagen, verifica que el enlace RAW siga el formato correcto y que el nombre del archivo
-      (incluyendo mayúsculas/minúsculas y espacios codificados) coincida exactamente.
+      (incluye mayúsculas/minúsculas y espacios codificados) coincida exactamente.
     </p>
   </main>
 
