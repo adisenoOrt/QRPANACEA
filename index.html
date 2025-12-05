@@ -31,76 +31,24 @@
       box-shadow: 0 20px 50px rgba(0,0,0,0.35);
       backdrop-filter: blur(8px);
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .title {
-      font-weight: 700;
-      letter-spacing: 0.4px;
-    }
-    .btns {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .title { font-weight: 700; letter-spacing: 0.4px; }
+    .btns { display: flex; gap: 10px; flex-wrap: wrap; }
     button {
-      appearance: none;
-      border: 1px solid rgba(148,163,184,0.3);
-      border-radius: 10px;
-      padding: 10px 14px;
-      background: #0b1220;
-      color: var(--text);
-      cursor: pointer;
-      transition: 180ms ease;
+      appearance: none; border: 1px solid rgba(148,163,184,0.3); border-radius: 10px;
+      padding: 10px 14px; background: #0b1220; color: var(--text); cursor: pointer; transition: 180ms ease;
     }
-    button:hover {
-      border-color: var(--accent);
-      color: white;
-      box-shadow: 0 6px 16px rgba(56,189,248,0.25);
-    }
+    button:hover { border-color: var(--accent); color: white; box-shadow: 0 6px 16px rgba(56,189,248,0.25); }
     .viewer {
-      margin-top: 18px;
-      aspect-ratio: 16/9;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #0a0f1e;
-      border: 1px dashed rgba(148,163,184,0.35);
+      margin-top: 18px; aspect-ratio: 16/9; display: grid; place-items: center;
+      border-radius: 12px; overflow: hidden; background: #0a0f1e; border: 1px dashed rgba(148,163,184,0.35);
     }
-    .viewer img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain; /* usa 'cover' si quieres recortar al marco */
-      display: none;       /* ocultas por defecto */
-    }
-    .viewer img.active {
-      display: block;
-      animation: fade 220ms ease;
-    }
+    .viewer img { width: 100%; height: 100%; object-fit: contain; display: none; }
+    .viewer img.active { display: block; animation: fade 220ms ease; }
     @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
-    .hint {
-      font-size: 0.9rem;
-      color: #9ca3af;
-      margin-top: 8px;
-      text-align: center;
-    }
-    .links {
-      margin-top: 10px;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .links a {
-      color: #93c5fd;
-      text-decoration: underline;
-      font-size: 0.9rem;
-    }
+    .hint { font-size: 0.9rem; color: #9ca3af; margin-top: 8px; text-align: center; }
+    .links { margin-top: 10px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .links a { color: #93c5fd; text-decoration: underline; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -115,21 +63,21 @@
     </div>
 
     <section class="viewer" aria-live="polite">
-      <!-- Altair -->
+      <!-- Altair (URL RAW con hash de commit) -->
       <img
         id="imgAltair"
         loading="lazy"
         src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumental.JPG"
-        alt="Altair: Bandeja 1 Contenedor ithubusercontent.com/adisenoOrt/QRPANACEA/refs/heads/main/Ensamble%20Bandeja%201%20-%20Antares.JPG"
-        alt="Antares: Ensamble Bandeja 1"
-     ass="links">
-      <!-- enlaces útiles para abrir en nueva pestaña si quieres verificar -->
-      <a href="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumentalltair en RAW</a>
-      <a href="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/refs/heads/main/Ensamble%20Bandeja%201%20-%20Antares.JPG" target="_blank" </div>
+        alt="Altair: Bandeja 1 Contenedor 1 Instrumental"
+g="lazy"
+        src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bandeja%201%20-%20Antares.JPG"
+        alt="Antares: Ensamble Bandeja  <div class="links">
+      <a href="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71df3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumental.JPGVer Altair en RAW</a>
+      <a href="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/20Bandeja%201%20-%20Antares.JPGVer Antares en RAW</a>
+    </div>
 
     <p class="hint">
-      Si alguna imagen no carga, verifica que el enlace RAW esté accesible y que los nombres
-      (incluyendo mayúsculas/minúsculas y espacios) coincidan exactamente.
+      Si no carga, asegúrate de que el enlace siga el formato RAW y que el nombre del archivo (incluyendo mayúsculas/minúsculas y espacios) coincida exactamente. [1](https://stackoverflow.com/questions/8779197/how-to-link-files-directly-from-github-raw-github-com)[2](https://stackoverflow.com/questions/41468951/images-not-displaying-in-github-pages)
     </p>
   </main>
 
@@ -139,4 +87,35 @@
     const btnClear  = document.getElementById('btnClear');
 
     const imgAltair = document.getElementById('imgAltair');
+    const imgAntares= document.getElementById('imgAntares');
+    const placeholder = document.getElementById('placeholder');
+
+    function showOnly(which) {
+      placeholder.style.display = 'none';
+      imgAltair.classList.remove('active');
+      imgAntares.classList.remove('active');
+
+      if (which === 'altair') {
+        imgAltair.classList.add('active');
+      } else if (which === 'antares') {
+        imgAntares.classList.add('active');
+      } else {
+        placeholder.style.display = 'block';
+      }
+    }
+
+    btnAltair.addEventListener('click', () => showOnly('altair'));
+    btnAntares.addEventListener('click', () => showOnly('antares'));
+    btnClear .addEventListener('click', () => showOnly(null));
+
+    // Feedback si alguna imagen falla al cargar
+    imgAltair.addEventListener('error', () => {
+      imgAltair.alt = 'No se pudo cargar Altair. Verifica el enlace RAW.';
+    });
+    imgAntares.addEventListener('error', () => {
+      imgAntares.alt = 'No se pudo cargar Antares. Verifica el enlace RAW.';
+    });
+  </script>
+</body>
+</html>
 
