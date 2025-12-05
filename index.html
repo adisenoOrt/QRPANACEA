@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Página con 2 botones - QR</title>
+  <style>
+    :root{ --bg:#f6f7fb; --card:#fff; --accent:#2b6cb0; --muted:#666;}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;background:var(--bg);display:flex;min-height:100vh;align-items:center;justify-content:center}
+    .card{background:var(--card);padding:28px;border-radius:12px;box-shadow:0 8px 30px rgba(20,30,40,0.08);width:min(720px,96%);text-align:center}
+    h1{margin:0 0 6px;font-size:20px}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+    .buttons{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
+    .btn{appearance:none;border:0;padding:12px 18px;border-radius:10px;font-weight:600;cursor:pointer;background:var(--accent);color:white;min-width:150px}
+    .btn.secondary{background:#4a5568}
+    .preview{border-radius:10px;overflow:hidden;border:1px solid #e6e9ef;background:#fff;max-width:100%;height:420px;display:grid;place-items:center}
+    .preview img{max-width:100%;max-height:100%;display:block}
+    .small{font-size:13px;color:var(--muted);margin-top:12px}
+    footer{margin-top:14px;font-size:13px;color:#8b8f97}
+    @media (max-width:480px){ .preview{height:260px} }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Página desde QR</h1>
+    <p class="lead">Toca un botón para ver la imagen correspondiente. Se abrirá en la vista previa o en nueva pestaña (según tu elección).</p>
+
+    <!-- BOTONES -->
+    <div class="buttons">
+      <!-- Cambia los data-image a tus URLs reales -->
+      <button class="btn" data-image="https://via.placeholder.com/1200x800?text=Imagen+1" id="btn1">Ver imagen 1</button>
+      <button class="btn secondary" data-image="https://via.placeholder.com/1200x800?text=Imagen+2" id="btn2">Ver imagen 2</button>
+    </div>
+
+    <!-- PREVIEW (muestra la imágen dentro de la misma página) -->
+    <div class="preview" id="preview">
+      <img src="https://via.placeholder.com/1200x800?text=Imagen+1" alt="Previsualización" id="previewImg">
+    </div>
+
+    <div class="small">
+      ¿Quieres que el QR abra esta página directamente y que desde aquí se elija la imagen? ¡Así funciona.
+    </div>
+
+    <footer>
+      Si prefieres que los botones abran las imágenes en otra pestaña, verás instrucciones más abajo.
+    </footer>
+  </main>
+
+  <script>
+    // Selecciona elementos
+    const btns = document.querySelectorAll('.btn');
+    const previewImg = document.getElementById('previewImg');
+
+    // Comportamiento por defecto: actualiza la vista previa en la misma página
+    btns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const url = btn.dataset.image;
+        // Actualiza preview
+        previewImg.src = url;
+        previewImg.alt = 'Imagen cargada';
+      });
+
+      // Doble-click abre en nueva pestaña (opcional)
+      btn.addEventListener('dblclick', (e) => {
+        const url = btn.dataset.image;
+        window.open(url, '_blank');
+      });
+    });
+
+    // Si quieres que siempre abra en nueva pestaña (sin vista previa),
+    // reemplaza el listener anterior por este (comenta el anterior y descomenta):
+    /*
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const url = btn.dataset.image;
+        window.open(url, '_blank');
+      });
+    });
+    */
+  </script>
+</body>
+</html>
