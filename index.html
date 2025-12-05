@@ -1,15 +1,16 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Altair vs Antares</title>
+  <title>Altair y Antares</title>
   <style>
     :root {
-      --bg: #0f172a;       /* slate-900 */
-      --panel: #111827;    /* gray-900 */
-      --text: #e5e7eb;     /* gray-200 */
-      --accent: #38bdf8;   /* sky-400 */
+      --bg: #0f172a;
+      --panel: rgba(17, 24, 39, 0.85);
+      --text: #e5e7eb;
+      --accent: #38bdf8;
     }
     body {
       margin: 0;
@@ -19,11 +20,12 @@
       min-height: 100vh;
       display: grid;
       place-items: center;
+      padding: 16px;
     }
     .card {
       width: min(960px, 92vw);
-      background: rgba(17, 24, 39, 0.8);
-      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: var(--panel);
+      border: 1px solid rgba(148, 163, 184, 0.25);
       border-radius: 16px;
       padding: 24px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.35);
@@ -81,11 +83,23 @@
       animation: fade 220ms ease;
     }
     @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
-
     .hint {
       font-size: 0.9rem;
       color: #9ca3af;
       margin-top: 8px;
+      text-align: center;
+    }
+    .links {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .links a {
+      color: #93c5fd;
+      text-decoration: underline;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -101,14 +115,21 @@
     </div>
 
     <section class="viewer" aria-live="polite">
-      <!-- Ajusta las rutas a tus archivos -->
-      <img id="imgAltair" src="jpg
-      <div id="placeholder" class="hint">Pulsa un botón para mostrar la imagen.</div>
-    </section>
+      <!-- Altair -->
+      <img
+        id="imgAltair"
+        loading="lazy"
+        src="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumental.JPG"
+        alt="Altair: Bandeja 1 Contenedor ithubusercontent.com/adisenoOrt/QRPANACEA/refs/heads/main/Ensamble%20Bandeja%201%20-%20Antares.JPG"
+        alt="Antares: Ensamble Bandeja 1"
+     ass="links">
+      <!-- enlaces útiles para abrir en nueva pestaña si quieres verificar -->
+      <a href="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/027c71b01d0b8fddf3d776952c276a6eab656680/Bandeja%201%20Contenedor%201%20Instrumentalltair en RAW</a>
+      <a href="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/refs/heads/main/Ensamble%20Bandeja%201%20-%20Antares.JPG" target="_blank" </div>
 
     <p class="hint">
-      Consejos: coloca <code>altair.jpg</code> y <code>antares.jpg</code> en el mismo directorio que este <code>index.html</code>.  
-      Si están en una carpeta (por ejemplo <code>assets/</code>), usa <code>assets/altair.jpg</code>.
+      Si alguna imagen no carga, verifica que el enlace RAW esté accesible y que los nombres
+      (incluyendo mayúsculas/minúsculas y espacios) coincidan exactamente.
     </p>
   </main>
 
@@ -118,40 +139,4 @@
     const btnClear  = document.getElementById('btnClear');
 
     const imgAltair = document.getElementById('imgAltair');
-    const imgAntares= document.getElementById('imgAntares');
-    const placeholder = document.getElementById('placeholder');
-
-    function showOnly(which) {
-      // Ocultar placeholder
-      placeholder.style.display = 'none';
-
-      // Quitar estado activo
-      imgAltair.classList.remove('active');
-      imgAntares.classList.remove('active');
-
-      // Mostrar el solicitado
-      if (which === 'altair') {
-        imgAltair.classList.add('active');
-      } else if (which === 'antares') {
-        imgAntares.classList.add('active');
-      } else {
-        // Restaurar placeholder si no hay selección
-        placeholder.style.display = 'block';
-      }
-    }
-
-    btnAltair.addEventListener('click', () => showOnly('altair'));
-    btnAntares.addEventListener('click', () => showOnly('antares'));
-    btnClear .addEventListener('click', () => showOnly(null));
-
-    // Manejo básico de errores de carga (opcional)
-    imgAltair.addEventListener('error', () => {
-      imgAltair.alt = 'No se encontró altair.jpg. Verifica la ruta.';
-    });
-    imgAntares.addEventListener('error', () => {
-      imgAntares.alt = 'No se encontró antares.jpg. Verifica la ruta.';
-    });
-  </script>
-</body>
-</html>
 
