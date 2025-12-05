@@ -1,151 +1,157 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Página con 2 botones - QR</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Altair vs Antares</title>
   <style>
-    :root{ --bg:#f6f7fb; --card:#fff; --accent:#2b6cb0; --muted:#666;}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;background:var(--bg);display:flex;min-height:100vh;align-items:center;justify-content:center}
-    .card{background:var(--card);padding:28px;border-radius:12px;box-shadow:0 8px 30px rgba(20,30,40,0.08);width:min(720px,96%);text-align:center}
-    h1{margin:0 0 6px;font-size:20px}
-    p.lead{margin:0 0 18px;color:var(--muted)}
-    .buttons{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
-    .btn{appearance:none;border:0;padding:12px 18px;border-radius:10px;font-weight:600;cursor:pointer;background:var(--accent);color:white;min-width:150px}
-    .btn.secondary{background:#4a5568}
-    .preview{border-radius:10px;overflow:hidden;border:1px solid #e6e9ef;background:#fff;max-width:100%;height:420px;display:grid;place-items:center;position:relative}
-    .preview img{max-width:100%;max-height:100%;display:block}
-    .preview .msg{position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,0.6);color:#fff;padding:6px 10px;border-radius:8px;font-size:13px;display:none}
-    .preview.loading::after{content:'Cargando…';position:absolute;right:12px;top:12px;background:rgba(0,0,0,0.6);color:#fff;padding:6px 10px;border-radius:8px;font-size:13px}
-    .preview.error .msg{display:block}
-    .small{font-size:13px;color:var(--muted);margin-top:12px}
-    footer{margin-top:14px;font-size:13px;color:#8b8f97}
-    @media (max-width:480px){ .preview{height:260px} }
+    :root {
+      --bg: #0f172a;       /* slate-900 */
+      --panel: #111827;    /* gray-900 */
+      --text: #e5e7eb;     /* gray-200 */
+      --accent: #38bdf8;   /* sky-400 */
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #0b1021, #10162f);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+    }
+    .card {
+      width: min(960px, 92vw);
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .title {
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+    .btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    button {
+      appearance: none;
+      border: 1px solid rgba(148,163,184,0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: #0b1220;
+      color: var(--text);
+      cursor: pointer;
+      transition: 180ms ease;
+    }
+    button:hover {
+      border-color: var(--accent);
+      color: white;
+      box-shadow: 0 6px 16px rgba(56,189,248,0.25);
+    }
+    .viewer {
+      margin-top: 18px;
+      aspect-ratio: 16/9;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0a0f1e;
+      border: 1px dashed rgba(148,163,184,0.35);
+    }
+    .viewer img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* usa 'cover' si quieres recortar al marco */
+      display: none;       /* ocultas por defecto */
+    }
+    .viewer img.active {
+      display: block;
+      animation: fade 220ms ease;
+    }
+    @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
+
+    .hint {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
   <main class="card">
-    <h1>Página desde QR</h1>
-    <p class="lead">Toca un botón para ver la imagen correspondiente. Se abrirá en la vista previa o en nueva pestaña (según tu elección).</p>
-
-    <!-- BOTONES -->
-    <div class="buttons">
-      <!-- usa raw.githubusercontent.com con /<owner>/<repo>/<branch>/<path> -->
-      <button class="btn" data-image="https://raw.githubusercontent.com/adisenoOrt/QRPANACEA/main/Ensamble%20Bandeja%201%20-%20Antares.JPG" id="btn1">Ver imagen 1</button>
-      <button class="btn secondary" data-image="https://via.placeholder.com/1200x800?text=Imagen+2" id="btn2">Ver imagen 2</button>
+    <div class="header">
+      <h1 class="title">Mostrar imágenes: Altair y Antares</h1>
+      <div class="btns">
+        <button id="btnAltair">Altair</button>
+        <button id="btnAntares">Antares</button>
+        <button id="btnClear" title="Ocultar imagen">Ocultar</button>
+      </div>
     </div>
 
-    <!-- PREVIEW (muestra la imágen dentro de la misma página) -->
-    <div class="preview" id="preview">
-      <img src="https://via.placeholder.com/1200x800?text=Imagen+1" alt="Previsualización" id="previewImg">
-      <div class="msg" id="previewMsg">No se pudo cargar la imagen</div>
-    </div>
+    <section class="viewer" aria-live="polite">
+      <!-- Ajusta las rutas a tus archivos -->
+      <img id="imgAltair" src="jpg
+      <div id="placeholder" class="hint">Pulsa un botón para mostrar la imagen.</div>
+    </section>
 
-    <div class="small">
-      ¿Quieres que el QR abra esta página directamente y que desde aquí se elija la imagen? ¡Así funciona.
-    </div>
-
-    <footer>
-      Si prefieres que los botones abran las imágenes en otra pestaña, verás instrucciones más abajo.
-    </footer>
+    <p class="hint">
+      Consejos: coloca <code>altair.jpg</code> y <code>antares.jpg</code> en el mismo directorio que este <code>index.html</code>.  
+      Si están en una carpeta (por ejemplo <code>assets/</code>), usa <code>assets/altair.jpg</code>.
+    </p>
   </main>
 
   <script>
-    // Elementos
-    const btns = document.querySelectorAll('.btn');
-    const previewImg = document.getElementById('previewImg');
-    const preview = document.getElementById('preview');
-    const previewMsg = document.getElementById('previewMsg');
+    const btnAltair = document.getElementById('btnAltair');
+    const btnAntares = document.getElementById('btnAntares');
+    const btnClear  = document.getElementById('btnClear');
 
-    // Placeholder y control de URL actual
-    const placeholder = 'https://via.placeholder.com/1200x800?text=No+se+encuentra+la+imagen';
-    let currentObjectUrl = null;
+    const imgAltair = document.getElementById('imgAltair');
+    const imgAntares= document.getElementById('imgAntares');
+    const placeholder = document.getElementById('placeholder');
 
-    // Limpia object URL anterior si existe
-    function revokeCurrentObjectUrl() {
-      if (currentObjectUrl) {
-        URL.revokeObjectURL(currentObjectUrl);
-        currentObjectUrl = null;
+    function showOnly(which) {
+      // Ocultar placeholder
+      placeholder.style.display = 'none';
+
+      // Quitar estado activo
+      imgAltair.classList.remove('active');
+      imgAntares.classList.remove('active');
+
+      // Mostrar el solicitado
+      if (which === 'altair') {
+        imgAltair.classList.add('active');
+      } else if (which === 'antares') {
+        imgAntares.classList.add('active');
+      } else {
+        // Restaurar placeholder si no hay selección
+        placeholder.style.display = 'block';
       }
     }
 
-    // Intenta cargar la imagen usando fetch -> blob -> objectURL.
-    // Esto a menudo evita problemas al asignar directamente la URL remota
-    // y facilita detectar errores (404/403) anteriormente silenciados.
-    async function loadImageToPreview(url) {
-      // marca como cargando
-      preview.classList.add('loading');
-      preview.classList.remove('error');
-      previewMsg.textContent = '';
+    btnAltair.addEventListener('click', () => showOnly('altair'));
+    btnAntares.addEventListener('click', () => showOnly('antares'));
+    btnClear .addEventListener('click', () => showOnly(null));
 
-      // evita fugas de memoria
-      revokeCurrentObjectUrl();
-
-      try {
-        // intento de fetch con timeout
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout
-
-        const resp = await fetch(url, { mode: 'cors', signal: controller.signal });
-        clearTimeout(timeoutId);
-
-        if (!resp.ok) {
-          throw new Error('HTTP ' + resp.status + ' ' + resp.statusText);
-        }
-
-        const blob = await resp.blob();
-
-        // Opcional: comprobar tipo MIME simple para ver si realmente es imagen
-        if (!blob.type.startsWith('image/')) {
-          throw new Error('El recurso no es una imagen (mime: ' + blob.type + ')');
-        }
-
-        // crea objectURL y asigna
-        currentObjectUrl = URL.createObjectURL(blob);
-        previewImg.src = currentObjectUrl;
-        previewImg.alt = 'Imagen cargada';
-        preview.classList.remove('error');
-      } catch (err) {
-        // En caso de error, muestra mensaje y placeholder
-        console.warn('Error cargando imagen para preview:', err);
-        preview.classList.add('error');
-        previewMsg.textContent = 'No se pudo cargar la imagen. Puedes abrirla en nueva pestaña para ver el error real.';
-        previewImg.src = placeholder;
-        previewImg.alt = 'No disponible';
-      } finally {
-        preview.classList.remove('loading');
-      }
-    }
-
-    // Manejadores de eventos para botones
-    btns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const url = btn.dataset.image;
-        // guarda la URL para debug
-        previewImg.dataset.requestedUrl = url;
-        // intenta cargar via fetch+blob
-        loadImageToPreview(url);
-      });
-
-      // doble click abre directamente en nueva pestaña
-      btn.addEventListener('dblclick', (e) => {
-        const url = btn.dataset.image;
-        window.open(url, '_blank');
-      });
+    // Manejo básico de errores de carga (opcional)
+    imgAltair.addEventListener('error', () => {
+      imgAltair.alt = 'No se encontró altair.jpg. Verifica la ruta.';
     });
-
-    // Manejo de error/carga por si el src directo falla (seguridad extra)
-    previewImg.addEventListener('error', () => {
-      // Si falla al mostrar el objectURL o src directo, ya hemos intentado fallback
-      if (!preview.classList.contains('error')) {
-        preview.classList.add('error');
-        previewMsg.textContent = 'Error mostrando la imagen. Abre en nueva pestaña para depurar.';
-        previewImg.src = placeholder;
-      }
+    imgAntares.addEventListener('error', () => {
+      imgAntares.alt = 'No se encontró antares.jpg. Verifica la ruta.';
     });
-
-    // limpiar object URLs al salir de la página
-    window.addEventListener('beforeunload', revokeCurrentObjectUrl);
   </script>
 </body>
 </html>
